@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:17.5
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=pass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - db
+
+  php:
+    container_name: symf
+    build: .docker/php/
+    image: symf
+    restart: always
+    volumes:
+      - .:/var/www/symf
+      - ./.docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+    networks:
+      - php
+      - db
+
+  nginx:
+    image: nginx:latest
+    restart: always
+    volumes:
+      - .:/var/www/symf
+      - .docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - php
+
+networks:
+  php:
+  db:
+
+volumes:
+  pgdata:
