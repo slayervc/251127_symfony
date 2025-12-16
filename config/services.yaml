@@ -8,39 +8,39 @@ services:
     App\:
         resource: '../src/'
 
-    App\Service\InjectionMonster:
-        properties:
-            eventDispatcher: '@event_dispatcher'
-
-    transport_interface_alias: '@App\Service\TransportInterface'
-
-    App\Service\TransportInterface:
-        class: App\Service\FileTransport
-        arguments:
-            $filePath: '%env(FT_FILE_PATH)%'
-
-    notifier.transport.sms.alias:
-        alias: '@notifier.transport.sms'
-
-    notifier.transport.sms:
-        class: App\Service\SmsTransport
-
-    notifier.transport.email:
-        class: App\Service\MailTransport
-
-    notifier.transport.file:
-        class: App\Service\FileTransport
-        arguments:
-            $filePath: '%env(FT_FILE_PATH)%'
-
-    notifier.transport.file.local:
-        class: App\Service\FileTransport
-        arguments:
-            $filePath: 'LOCAL_PATH'
-
-    App\Console\TestCommand:
-        arguments:
-            $firstTransport: '@notifier.transport.sms'
-            $secondTransport: '@notifier.transport.email'
-            $thirdTransport: '@notifier.transport.file'
-            $fourthTransport: '@notifier.transport.file.local'
+#    App\Service\InjectionMonster:
+#        properties:
+#            eventDispatcher: '@event_dispatcher'
+#
+#    transport_interface_alias: '@App\Service\TransportInterface'
+#
+#    App\Service\TransportInterface:
+#        class: App\Service\FileTransport
+#        arguments:
+#            $filePath: '%env(FT_FILE_PATH)%'
+#
+#    notifier.transport.sms.alias:
+#        alias: '@notifier.transport.sms'
+#
+#    notifier.transport.sms:
+#        class: App\Service\SmsTransport
+#
+#    notifier.transport.email:
+#        class: App\Service\MailTransport
+#
+#    notifier.transport.file:
+#        class: App\Service\FileTransport
+#        arguments:
+#            $filePath: '%env(FT_FILE_PATH)%'
+#
+#    notifier.transport.file.local:
+#        class: App\Service\FileTransport
+#        arguments:
+#            $filePath: 'LOCAL_PATH'
+#
+#    App\Console\TestCommand:
+#        arguments:
+#            $firstTransport: '@notifier.transport.sms'
+#            $secondTransport: '@notifier.transport.email'
+#            $thirdTransport: '@notifier.transport.file'
+#            $fourthTransport: '@notifier.transport.file.local'
