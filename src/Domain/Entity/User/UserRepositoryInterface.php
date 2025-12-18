@@ -8,7 +8,9 @@ interface UserRepositoryInterface
 {
     public function save(User $user): void;
 
-    public function getById(int $id): User;
+    public function findById(int $id): ?User;
+
+    public function findByLogin(string $login): ?User;
 
     /**
      * @param string $lastname

@@ -6,9 +6,13 @@ namespace App\Infrastructure\Console;
 
 use App\Domain\Entity\Profile;
 use App\Domain\Entity\User\User;
+use App\Domain\Entity\User\UserRepositoryInterface;
+use App\Domain\Service\Params\User\CreateUserParams;
+use App\Domain\Service\User\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -16,20 +20,32 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CreateUser extends Command
 {
     public function __construct(
-        private readonly EntityManagerInterface $em,
+        private readonly UserRepositoryInterface $userRepository
     ) {
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        parent::configure();
+        $this->setDescription('Creates a new user');
+        $this->addArgument('username', InputArgument::REQUIRED, 'Username');
+        $this->addArgument('firstname', InputArgument::REQUIRED, 'First name');
+        $this->addArgument('lastname', InputArgument::REQUIRED, 'Last name');
+        $this->addArgument('email', InputArgument::REQUIRED, 'Email address');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $profile = new Profile('Patya', 'Pupkin', 'Patya@mail.ru');
-        $user = new User('someDude1eds439', $profile);
+        $params = new CreateUserParams(
+            $input->getArgument('username'),
+            $input->getArgument('firstname'),
+            $input->getArgument('lastname'),
+            $input->getArgument('email')
+        );
 
-
-        $this->em->persist($profile);
-        $this->em->persist($user);
-        $this->em->flush();
+        $service = new UserService($this->userRepository);
+        $service->create($params);
 
         return Command::SUCCESS;
     }

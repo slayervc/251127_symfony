@@ -23,12 +23,18 @@ class DoctrineUserRepository implements UserRepositoryInterface
     public function save(User $user): void
     {
         $this->em->persist($user);
+        $this->em->persist($user->getProfile());
         $this->em->flush();
     }
 
-    public function getById(int $id): User
+    public function findById(int $id): ?User
     {
         return $this->userRepository->find($id);
+    }
+
+    public function findByLogin(string $login): ?User
+    {
+        return $this->userRepository->findOneBy(['login' => $login]);
     }
 
     /**

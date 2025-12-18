@@ -21,7 +21,7 @@ class DumpUser extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $userById = $this->userRepository->getById(2);
+        $userById = $this->userRepository->findById(2);
         $usersByLastName = $this->userRepository->findAllByLastName('kin');
 
         $output->writeln('<info>UserById: </info>' . $userById->getId());

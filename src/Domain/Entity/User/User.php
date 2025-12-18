@@ -20,12 +20,16 @@ class User
     #[ORM\Column(length: 100)]
     private string $login;
 
+    #[ORM\Column()]
+    private string $password;
+
     #[ORM\OneToOne(targetEntity: Profile::class, mappedBy: 'user')]
     private Profile $profile;
 
-    public function __construct(string $login, Profile $profile)
+    public function __construct(string $login, string $password, Profile $profile)
     {
         $this->login = $login;
+        $this->password = $password;
         $this->profile = $profile;
         $profile->setUser($this);
     }
@@ -43,5 +47,15 @@ class User
     public function getProfile(): Profile
     {
         return $this->profile;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
     }
 }

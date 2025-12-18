@@ -5,42 +5,19 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    App\:
-        resource: '../src/'
+    App\Infrastructure\Service\:
+        resource: '../src/Infrastructure/Service/'
 
-#    App\Service\InjectionMonster:
-#        properties:
-#            eventDispatcher: '@event_dispatcher'
-#
-#    transport_interface_alias: '@App\Service\TransportInterface'
-#
-#    App\Service\TransportInterface:
-#        class: App\Service\FileTransport
-#        arguments:
-#            $filePath: '%env(FT_FILE_PATH)%'
-#
-#    notifier.transport.sms.alias:
-#        alias: '@notifier.transport.sms'
-#
-#    notifier.transport.sms:
-#        class: App\Service\SmsTransport
-#
-#    notifier.transport.email:
-#        class: App\Service\MailTransport
-#
-#    notifier.transport.file:
-#        class: App\Service\FileTransport
-#        arguments:
-#            $filePath: '%env(FT_FILE_PATH)%'
-#
-#    notifier.transport.file.local:
-#        class: App\Service\FileTransport
-#        arguments:
-#            $filePath: 'LOCAL_PATH'
-#
-#    App\Console\TestCommand:
-#        arguments:
-#            $firstTransport: '@notifier.transport.sms'
-#            $secondTransport: '@notifier.transport.email'
-#            $thirdTransport: '@notifier.transport.file'
-#            $fourthTransport: '@notifier.transport.file.local'
+    App\Infrastructure\Console\:
+        resource: '../src/Infrastructure/Console/'
+
+    App\Infrastructure\Http\Controller\:
+        resource: '../src/Infrastructure/Http/Controller/'
+
+    App\Infrastructure\Repository\:
+        resource: '../src/Infrastructure/Repository/'
+
+    App\Infrastructure\Security\SecurityUserProvider: ~
+
+    App\Domain\Entity\User\UserRepositoryInterface:
+        class: App\Infrastructure\Repository\User\DoctrineUserRepository

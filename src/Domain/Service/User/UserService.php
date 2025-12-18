@@ -4,27 +4,33 @@ declare(strict_types=1);
 
 namespace App\Domain\Service\User;
 
+use App\Domain\Entity\Profile;
 use App\Domain\Entity\User\User;
 use App\Domain\Entity\User\UserRepositoryInterface;
-use App\Infrastructure\Service\Notifier;
+use App\Domain\Service\Params\User\CreateUserParams;
 
 class UserService
 {
     public function __construct(
-        private readonly AccountRepositoryInterface $accountRepository,
         private readonly UserRepositoryInterface $userRepository,
-        private readonly Notifier $notifier,
     ) {
     }
 
-    public function create(): void
+    public function create(CreateUserParams $params): User
     {
-        //Псеводокод для примера
-        $user = new User();
-        $account = new Account();
-        $account->setBalance(1000);
+        $profile = new Profile(
+            $params->firstName,
+            $params->lastName,
+            $params->email,
+        );
+
+        $user = new User($params->login, $params->password, $profile);
         $this->userRepository->save($user);
-        $this->accountRepository->save($account);
-        $this->notifier->notify();
+
+        return $user;
+
+        //Дополнительная логика по созданию пользователя размещается здесь, например:
+            //Добавление юзера в дефолтную группу
+            //Начисление welcome-бонуса на счет
     }
 }
